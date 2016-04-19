@@ -25,11 +25,11 @@ FIXME api console and raml
 
 class WishListsServer extends HttpServer {
 
-  override val modules = Seq(oauthModule, wishListsModule)
+  override val modules = Seq(oauthModule, wishListsRepositoryModule)
 
   def oauthModule = OAuthModule
 
-  def wishListsModule = InMemoryWishListsRepositoryModule
+  def wishListsRepositoryModule = InMemoryWishListsRepositoryModule
 
   override def jacksonModule = WishListsJacksonModule
 

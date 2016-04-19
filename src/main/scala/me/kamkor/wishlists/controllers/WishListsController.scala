@@ -24,7 +24,7 @@ class WishListsController @Inject()(wishListsRepository: WishListsRepository) ex
   }
 
   get("/wishlists/:id") { request: Request =>
-    Future(response.internalServerError("FIXME"))
+    wishListsRepository.get(request.getParam("id"))
   }
 
   put("/wishlists/:id") { request: WishListPutOrPostRequest =>
