@@ -1,4 +1,4 @@
-package me.kamkor.wishlists.oauth
+package me.kamkor.common.oauth
 
 import com.twitter.inject.TwitterModule
 

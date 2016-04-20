@@ -1,18 +1,17 @@
 package me.kamkor.wishlists.domain.http
 
-import javax.inject.Inject
-
-import com.twitter.finagle.http.Request
+import com.twitter.finatra.request.RouteParam
 import com.twitter.finatra.validation._
 import me.kamkor.wishlists.domain.{WishList, WishListItem}
 import org.joda.time.DateTime
 
-//I didn't find a better way to handle both Put and Post request in the same DTO class using Finatra mechanism
 // FIXME use http object for WishListItem and convert it with toDomain
 
-case class WishListPutOrPostRequest(
-  @Inject
-  request: Request,
+case class WishListPutRequest(
+  @RouteParam
+  tenant: String,
+  @RouteParam
+  id: String,
   @NotEmpty
   owner: String,
   @NotEmpty
@@ -23,9 +22,7 @@ case class WishListPutOrPostRequest(
   items: Seq[WishListItem] = Seq.empty
 ) {
 
-  def toDomain(): WishList = toDomain(id = request.getParam("id"))
-
-  def toDomain(id: String): WishList =
+  def toDomain(): WishList =
     WishList(
       id = id,
       owner = owner,
@@ -34,6 +31,7 @@ case class WishListPutOrPostRequest(
       description = description,
       createdAt = createdAt,
       items = items)
+
 }
 
 

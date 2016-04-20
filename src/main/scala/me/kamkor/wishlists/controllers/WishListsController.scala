@@ -5,34 +5,28 @@ import javax.inject.{Inject, Singleton}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.util.Future
-import me.kamkor.wishlists.domain.http.{WishListPutOrPostRequest}
+import me.kamkor.wishlists.domain.http.WishListPutRequest
 import me.kamkor.wishlists.repository.WishListsRepository
 
 @Singleton
-class WishListsController @Inject()(wishListsRepository: WishListsRepository) extends Controller {
+class WishListsController @Inject()(
+  wishListsRepository: WishListsRepository
+) extends Controller {
 
-  post("/wishlists") { request: WishListPutOrPostRequest =>
-    wishListsRepository.create(request) map { wishList =>
-      response
-        .created(wishList)
-        .location(wishList.id)
-    }
-  }
-
-  get("/wishlists") { request: Request =>
+  get("/:tenant/wishlists") { request: Request =>
     Future(response.internalServerError("FIXME"))
   }
 
-  get("/wishlists/:id") { request: Request =>
-    wishListsRepository.get(request.getParam("id"))
+  get("/:tenant/wishlists/:id") { request: Request =>
+    wishListsRepository.get(request.getParam("tenant"), request.getParam("id"))
   }
 
-  put("/wishlists/:id") { request: WishListPutOrPostRequest =>
-    wishListsRepository.update(request) map (_ => response.noContent)
+  put("/:tenant/wishlists/:id") { request: WishListPutRequest =>
+    wishListsRepository.update(request.tenant, request.toDomain()) map (_ => response.noContent)
   }
 
-  delete("/wishlists/:id") { request: Request =>
-    Future(response.internalServerError("FIXME"))
+  delete("/:tenant/wishlists/:id") { request: Request =>
+    wishListsRepository.delete(request.getParam("tenant"), request.getParam("id")) map (_ => response.noContent)
   }
 
 }

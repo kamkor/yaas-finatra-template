@@ -1,6 +1,6 @@
-package me.kamkor.wishlists.oauth
+package me.kamkor.common.oauth
 
-import me.kamkor.wishlists.oauth.model.Token
+import me.kamkor.common.oauth.model.Token
 import com.twitter.util.Future
 
 class OAuthService {

@@ -1,4 +1,4 @@
-package me.kamkor.wishlists.oauth.model
+package me.kamkor.common.oauth.model
 
 import org.joda.time.DateTime
 

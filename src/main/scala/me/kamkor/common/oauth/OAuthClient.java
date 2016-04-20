@@ -1,4 +1,4 @@
-package me.kamkor.wishlists.oauth;
+package me.kamkor.common.oauth;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
