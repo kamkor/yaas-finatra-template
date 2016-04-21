@@ -1,9 +1,9 @@
-package me.kamkor.wishlists.modules
+package me.kamkor.yaas.http.modules
 
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 
-object WishListsJacksonModule extends FinatraJacksonModule {
+object JacksonModule extends FinatraJacksonModule {
 
   override val propertyNamingStrategy = CamelCasePropertyNamingStrategy
 

@@ -3,11 +3,10 @@ package me.kamkor.wishlists
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.inject.requestscope.FinagleRequestScopeFilter
-import me.kamkor.common.filters.YaasAwareFilter
+import me.kamkor.yaas.http.filters.YaasAwareFilter
+import me.kamkor.yaas.http.modules.{ExceptionMapperModule, JacksonModule}
+import me.kamkor.yaas.oauth.OAuthModule
 import me.kamkor.wishlists.controllers.WishListsController
-import me.kamkor.wishlists.modules.WishListsJacksonModule
-import me.kamkor.common.oauth.OAuthModule
 import me.kamkor.wishlists.repository.memory.InMemoryWishListsRepositoryModule
 
 object WishListsServerMain extends WishListsServer
@@ -33,7 +32,9 @@ class WishListsServer extends HttpServer {
 
   def wishListsRepositoryModule = InMemoryWishListsRepositoryModule
 
-  override def jacksonModule = WishListsJacksonModule
+  override def jacksonModule = JacksonModule
+
+  override def exceptionMapperModule = ExceptionMapperModule
 
   override def configureHttp(router: HttpRouter): Unit = {
     router

@@ -1,4 +1,4 @@
-package me.kamkor.common.oauth;
+package me.kamkor.yaas.oauth;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

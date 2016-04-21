@@ -1,4 +1,4 @@
-package me.kamkor.common.filters
+package me.kamkor.yaas.http.filters
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}

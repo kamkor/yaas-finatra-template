@@ -1,6 +1,6 @@
-package me.kamkor.common.oauth
+package me.kamkor.yaas.oauth
 
-import me.kamkor.common.oauth.model.Token
+import me.kamkor.yaas.oauth.model.Token
 import com.twitter.util.Future
 
 class OAuthService {

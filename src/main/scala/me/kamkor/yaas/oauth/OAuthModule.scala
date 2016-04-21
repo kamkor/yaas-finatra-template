@@ -1,4 +1,4 @@
-package me.kamkor.common.oauth
+package me.kamkor.yaas.oauth
 
 import com.twitter.inject.TwitterModule
 

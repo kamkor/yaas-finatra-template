@@ -1,4 +1,4 @@
-package me.kamkor.common.oauth.model
+package me.kamkor.yaas.oauth.model
 
 import org.joda.time.DateTime
 
