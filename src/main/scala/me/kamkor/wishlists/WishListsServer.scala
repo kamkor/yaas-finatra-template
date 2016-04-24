@@ -16,12 +16,11 @@ FIXME TODO
 FIXME circuit breaker to document repository
 FIXME endpoint tests
 FIXME MDC logging with propagation
-FIXME configurability with ENV variables
+FIXME configurability with ENV variables, JBP_CONFIG_JAVA_MAIN
 FIXME deployment
 FIXME error handling (yaas error message)
 FIXME YaaS Aware object (hybris-tenant and other parameters send by YaaS api proxy)
 FIXME api console and raml
-
  */
 
 class WishListsServer extends HttpServer {

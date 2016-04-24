@@ -6,7 +6,6 @@ case class WishList(
   id: String,
   owner: String,
   title: String,
-  url: Option[String],
   description: Option[String],
   createdAt: Option[DateTime],
   items: Seq[WishListItem]

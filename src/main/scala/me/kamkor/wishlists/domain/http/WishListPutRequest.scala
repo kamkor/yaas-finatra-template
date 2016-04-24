@@ -16,7 +16,6 @@ case class WishListPutRequest(
   owner: String,
   @NotEmpty
   title: String,
-  url: Option[String],
   description: Option[String],
   createdAt: Option[DateTime],
   items: Seq[WishListItem] = Seq.empty
@@ -27,7 +26,6 @@ case class WishListPutRequest(
       id = id,
       owner = owner,
       title = title,
-      url = url,
       description = description,
       createdAt = createdAt,
       items = items)
