@@ -14,5 +14,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Identifies client for the communication with https://devportal.yaas.io/services/document/latest/index.html
  */
-public @interface DocumentRepositoryClient {}
+public @interface DocumentClient {}
 

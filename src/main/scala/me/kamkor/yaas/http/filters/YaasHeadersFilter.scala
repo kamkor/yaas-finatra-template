@@ -4,6 +4,10 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.util.Future
 
+object YaasHeaders {
+  val HybrisTenant = "hybris-tenant"
+}
+
 case class YaasHeaders(hybrisTenant: String)
 
 class YaasHeadersFilter extends SimpleFilter[Request, Response] {
@@ -23,7 +27,7 @@ object YaasHeadersContext {
   }
 
   private[filters] def setYaasHeaders(request: Request): Unit = {
-    val hybrisTenant = request.headerMap("hybris-tenant")
+    val hybrisTenant = request.headerMap(YaasHeaders.HybrisTenant)
     val yaasAware = YaasHeaders(hybrisTenant)
     request.ctx.update(YaasHeadersField, yaasAware)
   }

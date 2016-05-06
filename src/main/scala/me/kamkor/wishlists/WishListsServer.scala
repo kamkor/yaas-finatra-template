@@ -1,13 +1,14 @@
 package me.kamkor.wishlists
 
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import me.kamkor.wishlists.controllers.WishListsController
-import me.kamkor.wishlists.repository.memory.InMemoryWishListsRepositoryModule
-import me.kamkor.yaas.http.filters.{YaasHeadersFilter, YaasHeadersTenantConsistentWithRouteFilter}
+import me.kamkor.wishlists.repository.document.DocumentWishListsRepositoryModule
+import me.kamkor.yaas.http.filters.{YaasHeadersFilter, YaasHeadersMDCFilter, YaasHeadersTenantConsistentWithRouteFilter}
 import me.kamkor.yaas.http.modules.{ExceptionMapperModule, JacksonModule}
-import me.kamkor.yaas.oauth.OAuthModule
+import me.kamkor.yaas.oauth2.OAuthModule
 
 object WishListsServerMain extends WishListsServer
 
@@ -29,7 +30,7 @@ class WishListsServer extends HttpServer {
 
   def oauthModule = OAuthModule
 
-  def wishListsRepositoryModule = InMemoryWishListsRepositoryModule
+  def wishListsRepositoryModule = DocumentWishListsRepositoryModule
 
   override def jacksonModule = JacksonModule
 
@@ -37,8 +38,11 @@ class WishListsServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter): Unit = {
     router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
       .filter[YaasHeadersFilter]
+      .filter[YaasHeadersMDCFilter]
       .add[YaasHeadersTenantConsistentWithRouteFilter, WishListsController]
   }
 

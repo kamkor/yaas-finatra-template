@@ -6,9 +6,9 @@ case class WishList(
   id: String,
   owner: String,
   title: String,
-  description: Option[String],
-  createdAt: Option[DateTime],
-  items: Seq[WishListItem]
+  description: Option[String] = None,
+  createdAt: Option[DateTime] = None,
+  items: Seq[WishListItem] = Seq.empty
 )
 
 

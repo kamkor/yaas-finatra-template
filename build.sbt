@@ -27,6 +27,8 @@ lazy val root = (project in file(".")).
         "com.twitter.finatra" %% "finatra-http" % finatraVersion,
         "com.twitter.finatra" %% "finatra-httpclient" % finatraVersion,
         "ch.qos.logback" % "logback-classic" % logbackVersion,
+        "com.twitter" %% "bijection-core" % "0.9.2",
+        "com.twitter" %% "bijection-util" % "0.9.2",
         "com.typesafe" % "config" % "1.3.0",
 
         "com.twitter.finatra" %% "finatra-http" % finatraVersion % "test",
