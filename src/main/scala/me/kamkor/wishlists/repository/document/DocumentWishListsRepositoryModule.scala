@@ -23,7 +23,7 @@ object DocumentWishListsRepositoryModule extends TwitterModule {
     val clientCredentials = ClientCredentials(
       documentClientId(), documentClientSecret(), Seq("hybris.document_view", "hybris.document_manage"))
 
-    httpClientFactory.newOAuth2Client(clientCredentials, new URL(documentUrl()))
+    httpClientFactory.newYaasProxyClient(clientCredentials, new URL(documentUrl()))
   }
 
   @Singleton

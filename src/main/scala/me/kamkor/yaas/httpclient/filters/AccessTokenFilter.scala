@@ -7,10 +7,13 @@ import com.twitter.util.Future
 import me.kamkor.yaas.oauth2.OAuthService
 import me.kamkor.yaas.oauth2.model.ClientCredentials
 
-private[httpclient] class OAuthFilter(oauthService: OAuthService, credentials: ClientCredentials) extends SimpleFilter[Request, Response] with Logging {
+private[httpclient] class AccessTokenFilter(oauthService: OAuthService, credentials: ClientCredentials) extends SimpleFilter[Request, Response] with Logging {
+
+  // FIXME token cache
+
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] =
     oauthService.getToken(credentials) flatMap { token =>
-      request.authorization = s"Bearer ${token.accessToken}"
+      request.authorization = token.bearerAuthorization
       service(request)
     }
 }

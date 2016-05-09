@@ -2,6 +2,7 @@ package me.kamkor.wishlists.repository.document
 
 import com.twitter.finagle.http.Status.{NotFound, Successful}
 import com.twitter.finagle.http._
+import com.twitter.finatra.http.exceptions.InternalServerErrorException
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
@@ -9,7 +10,6 @@ import com.twitter.util.Future
 import me.kamkor.finatra.httpclient.HttpClient
 import me.kamkor.wishlists.domain.WishList
 import me.kamkor.wishlists.repository.WishListsRepository
-import me.kamkor.yaas.http.exceptions.ValidationException
 
 /**
   * Uses multi-tenant YaaS.io document service to store WishLists.
@@ -20,40 +20,53 @@ class DocumentWishListsRepository(client: HttpClient, mapper: FinatraObjectMappe
   extends WishListsRepository with Logging {
 
   override def get(tenant: String, id: String): Future[Option[WishList]] = {
-    val request = RequestBuilder.get(path(tenant, id))
+    val getRequest = RequestBuilder.get(path(tenant, id))
 
-    client.execute(request) map { response =>
+    client.execute(getRequest) map { response =>
       response.status match {
-        case Successful(code) => Some(FinatraObjectMapper.parseResponseBody(response, mapper.reader[WishList]))
+        case Successful(code) => Some(mapper.parse[WishList](response.contentString))
         case NotFound => None
-        case _ => throw new ValidationException(response.contentString) // FIXME
+        case _ => {
+          error(s"Could not get wishlist for tenant '$tenant' and id: '$id', ${getErrorMessage(response)}")
+          throw InternalServerErrorException("Backing service error")
+        }
       }
     }
   }
 
   override def update(tenant: String, wishList: WishList): Future[WishList] = {
     val uri = Request.queryString(path(tenant, wishList.id), "upsert" -> "true")
-    val request = RequestBuilder.put(uri)
-    request.body(mapper.writeValueAsString(wishList))
+    val putRequest = RequestBuilder
+      .put(uri)
+      .body(mapper.writeValueAsString(wishList))
 
-    client.execute(request) map { response =>
+    client.execute(putRequest) map { response =>
       response.status match {
         case Successful(code) => wishList
-        case _ => throw new ValidationException(response.contentString) // FIXME
+        case _ => {
+          error(s"Could not update wishlist '$wishList' for tenant '$tenant', ${getErrorMessage(response)}")
+          throw InternalServerErrorException("Backing service error")
+        }
       }
     }
   }
 
   override def delete(tenant: String, id: String): Future[Unit] = {
-    val request = RequestBuilder.delete(path(tenant, id))
+    val deleteRequest = RequestBuilder.delete(path(tenant, id))
 
-    client.execute(request) map { response =>
+    client.execute(deleteRequest) map { response =>
       response.status match {
         case Successful(code) => ()
-        case _ => throw new ValidationException(response.contentString) // FIXME
+        case _ => {
+          error(s"Could not delete wishlist for tenant '$tenant' and id: '$id', ${getErrorMessage(response)}")
+          throw InternalServerErrorException("Backing service error")
+        }
       }
     }
   }
+
+  private def getErrorMessage(response: Response) =
+    s"Document service returned status'${response.status}' and body '${response.contentString}."
 
   private val hybrisClient = "stork.yaas-finatra-template"
 

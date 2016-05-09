@@ -7,5 +7,7 @@ case class AccessToken(
   @JsonProperty("expires_in") expiresIn: Int,
   scope: Option[String]) {
 
+  lazy val bearerAuthorization = s"Bearer ${accessToken}"
+
 }
 
