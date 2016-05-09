@@ -19,7 +19,7 @@ lazy val root = (project in file(".")).
     ),
 
     libraryDependencies ++= {
-      val finatraVersion = "2.1.5"
+      val finatraVersion = "2.1.6"
       val guiceVersion = "4.0"
       val logbackVersion = "1.0.13"
 
