@@ -2,7 +2,7 @@
 lazy val root = (project in file(".")).
   settings(
     organization := "me.kamkor",
-    name := "yaas-finatra-template",
+    name := "yaas-wishlist-service",
     version := "1.0.0",
     scalaVersion := "2.11.8",
 

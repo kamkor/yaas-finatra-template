@@ -5,7 +5,6 @@ import javax.inject.{Inject, Singleton}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.inject.Logging
-import com.twitter.util.Future
 import me.kamkor.wishlists.domain.http.WishListPutRequest
 import me.kamkor.wishlists.repository.WishListsRepository
 
@@ -14,10 +13,6 @@ import me.kamkor.wishlists.repository.WishListsRepository
 class WishListsController @Inject()(
   wishListsRepository: WishListsRepository
 ) extends Controller with Logging {
-
-  get("/:tenant/wishlists") { request: Request =>
-    Future(response.internalServerError("FIXME"))
-  }
 
   get("/:tenant/wishlists/:id") { request: Request =>
     wishListsRepository.get(request.getParam("tenant"), request.getParam("id"))
