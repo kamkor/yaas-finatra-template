@@ -30,6 +30,7 @@ lazy val root = (project in file(".")).
         "com.twitter" %% "bijection-core" % "0.9.2",
         "com.twitter" %% "bijection-util" % "0.9.2",
         "com.typesafe" % "config" % "1.3.0",
+        "com.github.ben-manes.caffeine" % "caffeine" % "2.3.0",
 
         "com.twitter.finatra" %% "finatra-http" % finatraVersion % "test",
         "com.twitter.finatra" %% "finatra-jackson" % finatraVersion % "test",

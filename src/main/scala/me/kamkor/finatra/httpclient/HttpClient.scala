@@ -8,7 +8,7 @@ import com.twitter.util.Future
 
 object HttpClient {
 
-  val DefaultFinagleClient: Http.Client =
+  private val DefaultFinagleClient: Http.Client =
     Http
       .client
       .withSessionQualifier.noFailFast

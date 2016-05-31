@@ -7,8 +7,9 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.TwitterModule
 import me.kamkor.finatra.httpclient.HttpClient
 import me.kamkor.wishlists.repository.WishListsRepository
-import me.kamkor.yaas.httpclient.HttpClientFactory
+import me.kamkor.yaas.oauth2.OAuthService
 import me.kamkor.yaas.oauth2.model.ClientCredentials
+import me.kamkor.yaas.proxy.YaasProxyClient
 
 object DocumentWishListsRepositoryModule extends TwitterModule {
 
@@ -19,16 +20,21 @@ object DocumentWishListsRepositoryModule extends TwitterModule {
   @Singleton
   @Provides
   @DocumentClient
-  def provideDocumentClient(httpClientFactory: HttpClientFactory): HttpClient = {
-    val clientCredentials = ClientCredentials(
-      documentClientId(), documentClientSecret(), Seq("hybris.document_view", "hybris.document_manage"))
-
-    httpClientFactory.newYaasProxyClient(clientCredentials, new URL(documentUrl()))
+  def provideDocumentClient(oauthService: OAuthService): YaasProxyClient = {
+    val httpClient = HttpClient(new URL(documentUrl()))
+    val proxyClient = new YaasProxyClient(oauthService, httpClient)
+    proxyClient
   }
 
   @Singleton
   @Provides
-  def providesWishListsRepository(@DocumentClient client: HttpClient, mapper: FinatraObjectMapper): WishListsRepository =
-    new DocumentWishListsRepository(client, mapper)
+  def providesWishListsRepository(oauthService: OAuthService, mapper: FinatraObjectMapper): WishListsRepository = {
+    val httpClient = HttpClient(new URL(documentUrl()))
+    val proxyClient = new YaasProxyClient(oauthService, httpClient)
+
+    val clientCredentials = ClientCredentials(
+      documentClientId(), documentClientSecret(), Seq("hybris.document_view", "hybris.document_manage"))
+    new DocumentWishListsRepository(proxyClient, mapper, clientCredentials)
+  }
 
 }

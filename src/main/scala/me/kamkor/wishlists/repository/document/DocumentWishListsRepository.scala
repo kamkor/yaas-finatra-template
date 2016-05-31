@@ -10,14 +10,18 @@ import com.twitter.util.Future
 import me.kamkor.finatra.httpclient.HttpClient
 import me.kamkor.wishlists.domain.WishList
 import me.kamkor.wishlists.repository.WishListsRepository
+import me.kamkor.yaas.oauth2.model.ClientCredentials
+import me.kamkor.yaas.proxy.YaasProxyClient
 
 /**
   * Uses multi-tenant YaaS.io document service to store WishLists.
   *
   * https://devportal.yaas.io/services/document/latest/index.html
   */
-class DocumentWishListsRepository(client: HttpClient, mapper: FinatraObjectMapper)
+class DocumentWishListsRepository(client: YaasProxyClient, mapper: FinatraObjectMapper, clientCredentials: ClientCredentials)
   extends WishListsRepository with Logging {
+
+  implicit val defaultClientCredentials = clientCredentials
 
   override def get(tenant: String, id: String): Future[Option[WishList]] = {
     val getRequest = RequestBuilder.get(path(tenant, id))
